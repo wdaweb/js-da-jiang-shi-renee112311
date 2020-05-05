@@ -7,15 +7,29 @@
     <title>Document</title>
     <style>
         body {
-            background: url("images/bg.jpg") center 100vh;
+            background: url("./images/bg.jpg") center 100vh;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
         }
 
         #top {
             width: 1500px;
             height: 80px;
             margin: auto;
-
             color: white;
+        }
+
+        #top2 {
+            width: 1500px;
+            height: 600px;
+            margin: auto;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .side {
@@ -25,6 +39,25 @@
             text-align: center;
             font-size: 30px;
             font-family: '微軟正黑體';
+        }
+
+        .side2RL {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            text-align: center;
+            font-size: 25px;
+            font-family: '微軟正黑體';
+            border: 1px solid blanchedalmond;
+            border-radius: 10px;
+            line-height: 175px;
+        }
+
+        .side2RL>img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         #bigtitle {
@@ -82,16 +115,26 @@
     <div id="result">
         <b>時間到！</b><br>
         您的分數：<span class="text_score">0</span><br>
-        最高分：<span id="text_highscore">0</span><br>
+        最高分：<span class="text_highscore">0</span><br>
         <input type="button" value="OK" id="OKbtn">
     </div>
     <div id="top">
         <div class="side">分數：<span class="text_score">0</span></div>
-        <div class="side" id="bigtitle">Boos!</div>
-        <div class="side">剩餘時間：<span id="text_time">10</span>秒</div>
+        <div class="side" id="bigtitle"> <img src="./images/title.png" alt="" height="80"></div>
+        <div class="side">剩餘時間：<span id="text_time">15</span>秒</div>
     </div>
 
-    <div id="game"></div>
+    <div id="top2">
+        <div class="side2RL">
+            <img src="./images/pointrule.png" width="200px">
+        </div>
+        <div id="game"></div>
+        <div class="side2RL">
+            最高分：<span class="text_highscore">0</span><br>
+            你的分數：<span class="text_score">0</span>
+        </div>
+    </div>
+
     <input type="button" value="開始遊戲" id="btn_start">
 
 
@@ -102,7 +145,7 @@
         let score = 0;
         let highscore = 0;
         // 剩餘時間
-        let timeleft = 10;
+        let timeleft = 15;
         // 遊戲計時器
         let gametimer = 0;
         // 流水號
@@ -112,7 +155,11 @@
         const rand = (num) => {
             return Math.round(Math.random() * num)
         }
-        let storage = JSON.parse(localStorage.getItem("highscore"));
+        let storage = localStorage.getItem("highscore");
+        if (storage !== null) {
+            highscore = storage.score
+            $(".text_highscore").text(highscore)
+        }
 
 
         const movezb = (zbid) => {
@@ -144,7 +191,7 @@
             // 重設分數與時間
             score = 0;
             $(".text_score").text(score);
-            timeleft = 10;
+            timeleft = 15;
             $("#text_time").text(timeleft);
             //遊戲倒數 
             gametimer = setInterval(() => {
@@ -159,8 +206,8 @@
                     $(this).attr("disabled", false);
                     if (storage == null || score > highscore) {
                         highscore = score;
-                        $("#text_highscore").text(highscore)
-                        localStorage.getItem("highscore", JSON.stringify(highscore))
+                        $(".text_highscore").text(highscore)
+                        localStorage.getItem("highscore", highscore)
                     }
                     setTimeout(() => {
                         $("#result").fadeIn("slow")
